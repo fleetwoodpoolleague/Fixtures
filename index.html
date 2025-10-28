@@ -179,8 +179,11 @@
           href="https://github.com/fleetwoodpoolleague/LeagueRepublicApi"
           target="_blank"
           rel="noopener"
-          >LeagueRepublicConsole</a
+          >LeagueRepublicApi</a
         >
+      </p>
+      <p id="last-updated" style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">
+        <!-- Last updated will be inserted here by JavaScript -->
       </p>
     </footer>
 
@@ -191,6 +194,34 @@
         const url = `webcal://${host}${path}/ics/${filename}`;
         window.location.href = url;
       }
+
+      // Display last updated information
+      document.addEventListener('DOMContentLoaded', function() {
+        const lastUpdatedElement = document.getElementById('last-updated');
+        
+        // Try to get the actual last modified date of the document
+        if (document.lastModified) {
+          const lastModified = new Date(document.lastModified);
+          
+          // Check if the date is valid (some servers don't provide this)
+          if (!isNaN(lastModified.getTime()) && lastModified.getFullYear() > 1970) {
+            lastUpdatedElement.textContent = `Last updated: ${lastModified.toLocaleDateString('en-GB', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}`;
+          } else {
+            // Fallback to current date if document.lastModified is not reliable
+            lastUpdatedElement.textContent = `Page loaded: ${new Date().toLocaleDateString('en-GB', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}`;
+          }
+        }
+      });
     </script>
   </body>
 </html>
