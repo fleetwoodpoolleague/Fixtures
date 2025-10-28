@@ -190,13 +190,6 @@
     </footer>
 
     <script>
-      function subscribe(filename) {
-        const host = window.location.host;
-        const path = window.location.pathname.replace(/\/[^/]*$/, '');
-        const url = `webcal://${host}${path}/ics/${filename}`;
-        window.location.href = url;
-      }
-
       // Display last updated information
       document.addEventListener('DOMContentLoaded', function() {
         const lastUpdatedElement = document.getElementById('last-updated');
