@@ -22,19 +22,6 @@
       header {
         background: var(--primary);
         color: #fff;
-        text-align: center;
-        padding: 2rem 1rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-      }
-      header h1 {
-        margin: 0;
-        font-size: 4rem;
-      }
-      header p {
-        margin-top: 0.5rem;
-        opacity: 0.9;
       }
 
       header {
@@ -88,6 +75,23 @@
         }
       }
 
+      .page-title {
+        text-align: center;
+        padding: 2rem 1rem;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .page-title h1 {
+        margin: 0;
+        font-size: 3rem;
+        color: var(--text);
+      }
+      .page-title p {
+        margin: 0.5rem 0 0;
+        opacity: 0.8;
+        font-size: 1.1rem;
+      }
+
       main {
         max-width: 900px;
         margin: 2rem auto;
@@ -138,9 +142,12 @@
   </head>
   <body>
     <header>
-      <h1>Fleetwood Pool League Fixtures</h1>
-      <p>Subscribe to your team’s fixtures via iCalendar (.ics)</p>
     </header>
+
+    <div class="page-title">
+      <h1>Fleetwood Pool League Fixtures</h1>
+      <p>Subscribe to your team's fixtures via iCalendar (.ics)</p>
+    </div>
 
     <main id="fixture-list">
       <!-- Example dummy .ics cards -->
@@ -169,7 +176,7 @@
       <p>
         Generated automatically by
         <a
-          href="https://github.com/sgrassie/LeagueRepublicConsole"
+          href="https://github.com/fleetwoodpoolleague/LeagueRepublicApi"
           target="_blank"
           rel="noopener"
           >LeagueRepublicConsole</a
@@ -178,16 +185,6 @@
     </footer>
 
     <script>
-      // Minimal smoke test to verify fixture cards exist
-      document.addEventListener("DOMContentLoaded", () => {
-        const cards = document.querySelectorAll(".ics-card");
-        if (cards.length < 1) {
-          console.error("No fixture cards found");
-        } else {
-          console.log(`Loaded ${cards.length} fixture cards.`);
-        }
-      });
-
       function subscribe(filename) {
         const host = window.location.host;
         const path = window.location.pathname.replace(/\/[^/]*$/, '');
