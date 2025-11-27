@@ -148,7 +148,8 @@
 
     <div class="page-title">
       <h1>Fleetwood Pool League Fixtures</h1>
-      <p>Subscribe to your team's fixtures via iCalendar (.ics) using the calendar system of your choice.</p>
+      <p>Subscribe to Division 1 or Division 2 fixtures via iCalendar (.ics) using the calendar system of your choice.</p>
+      <p>Alternatively, you can subscribe to your teams individual fixtures by selecting from the drop down.</p>
       <p>Import into Google Calendar, Outlook Calendar, or Apple Calendar are supported. For anything else, use the direct .ics link.</p>
     </div>
 
@@ -170,6 +171,38 @@
         <a href="https://outlook.office.com/calendar/0/addfromweb?url=webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-2.ics">Subscribe in Outlook Calendar</a>
         <a href="webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-2.ics">Subscribe in Apple Calendar</a>
         <a href="https://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-2.ics" download>Download .ICS</a>
+      </div>
+
+      <div class="ics-card">
+        <h2>Team Fixtures</h2>
+        <p>Select your team to view fixtures</p>
+        <select id="team-selector" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem;">
+          <option value="">-- Select a team --</option>
+          <option value="Bar-1.ics">Bar 1</option>
+          <option value="Cons-A.ics">Cons A</option>
+          <option value="Fleetwood-Cons-B.ics">Fleetwood Cons B</option>
+          <option value="Gardeners-Arms.ics">Gardeners Arms</option>
+          <option value="Gardeners-Vets.ics">Gardeners Vets</option>
+          <option value="Kings-Own-Comrades.ics">Kings Own Comrades</option>
+          <option value="Rossall-Tavern-.ics">Rossall Tavern</option>
+          <option value="Royal-Oak-A.ics">Royal Oak A</option>
+          <option value="Sherelles-A.ics">Sherelles A</option>
+          <option value="Strawberry-B.ics">Strawberry B</option>
+          <option value="Strawberry-Gardens.ics">Strawberry Gardens</option>
+          <option value="Tee-Time-Social-Club.ics">Tee Time Social Club</option>
+          <option value="The-Ashley.ics">The Ashley</option>
+          <option value="The-Bug-A.ics">The Bug A</option>
+          <option value="The-Bug-B.ics">The Bug B</option>
+          <option value="Top-Club.ics">Top Club</option>
+          <option value="Wings-Club.ics">Wings Club</option>
+          <option value="Working-Mens-Club.ics">Working Mens Club</option>
+        </select>
+        <div id="team-links" style="display: none;">
+          <a id="google-link" href="">Subscribe in Google Calendar</a>
+          <a id="outlook-link" href="">Subscribe in Outlook Calendar</a>
+          <a id="apple-link" href="">Subscribe in Apple Calendar</a>
+          <a id="download-link" href="" download>Download .ICS</a>
+        </div>
       </div>
 
       <!-- <div class="ics-card">
@@ -198,6 +231,34 @@
     </footer>
 
     <script>
+      // Handle team selector dropdown
+      document.addEventListener('DOMContentLoaded', function() {
+        const teamSelector = document.getElementById('team-selector');
+        const teamLinks = document.getElementById('team-links');
+        const googleLink = document.getElementById('google-link');
+        const outlookLink = document.getElementById('outlook-link');
+        const appleLink = document.getElementById('apple-link');
+        const downloadLink = document.getElementById('download-link');
+
+        teamSelector.addEventListener('change', function() {
+          const selectedFile = this.value;
+          
+          if (selectedFile) {
+            const baseUrl = 'https://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/';
+            const webcalUrl = 'webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/';
+            
+            googleLink.href = `https://calendar.google.com/calendar/r?cid=${webcalUrl}${selectedFile}`;
+            outlookLink.href = `https://outlook.office.com/calendar/0/addfromweb?url=${webcalUrl}${selectedFile}`;
+            appleLink.href = `${webcalUrl}${selectedFile}`;
+            downloadLink.href = `${baseUrl}${selectedFile}`;
+            
+            teamLinks.style.display = 'block';
+          } else {
+            teamLinks.style.display = 'none';
+          }
+        });
+      });
+
       // Display last updated information
       document.addEventListener('DOMContentLoaded', function() {
         const lastUpdatedElement = document.getElementById('last-updated');
