@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//github.com/sgrassie/LeagueRepublicConsole//EN
+X-WR-CALNAME:Fleetwood Pool League: Kev Nixon
+X-WR-TIMEZONE:Europe/London
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:45063555@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261018T225500Z
+SUMMARY:Nigel Webb vs Kev Nixon
+LOCATION:Wings Social Club
+DESCRIPTION:Status: Normal\; Result: 3-1
+END:VEVENT
+END:VCALENDAR

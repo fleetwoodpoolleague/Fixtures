@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//github.com/sgrassie/LeagueRepublicConsole//EN
+X-WR-CALNAME:Fleetwood Pool League: Hamer/Houldcroft
+X-WR-TIMEZONE:Europe/London
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:45063724@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261018T225500Z
+SUMMARY:Williams/Williams vs Hamer/Houldcroft
+LOCATION:Working Mens Club
+DESCRIPTION:Status: Normal\; Result: 3-2
+END:VEVENT
+END:VCALENDAR

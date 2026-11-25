@@ -1,0 +1,31 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//github.com/sgrassie/LeagueRepublicConsole//EN
+X-WR-CALNAME:Fleetwood Pool League: Jake Stewart
+X-WR-TIMEZONE:Europe/London
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:45063134@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20260927T225500Z
+SUMMARY:Adam Al-Sharifi vs Jake Stewart
+LOCATION:Tee Time Social Club
+DESCRIPTION:Status: Normal\; Result: 2-3
+END:VEVENT
+BEGIN:VEVENT
+UID:45244250@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261018T225500Z
+SUMMARY:Jake Stewart vs Mark Southern
+LOCATION:Flights Sports and Social Bar
+DESCRIPTION:Status: Normal\; Result: 3-2
+END:VEVENT
+BEGIN:VEVENT
+UID:45546027@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261108T235500Z
+SUMMARY:Jake Stewart vs Geoff Worthington
+LOCATION:Flights Sports and Social Bar
+DESCRIPTION:Status: Normal\; Result: 0-3
+END:VEVENT
+END:VCALENDAR

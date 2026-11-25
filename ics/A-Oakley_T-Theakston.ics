@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//github.com/sgrassie/LeagueRepublicConsole//EN
+X-WR-CALNAME:Fleetwood Pool League: A Oakley/T Theakston
+X-WR-TIMEZONE:Europe/London
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:45256026@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261018T225500Z
+SUMMARY:A Oakley/T Theakston vs Buzza/Slater
+LOCATION:Strawberry Gardens
+DESCRIPTION:Status: Normal\; Result: 3-0
+END:VEVENT
+BEGIN:VEVENT
+UID:45546029@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261115T235500Z
+SUMMARY:A Oakley/T Theakston vs Myerscough/Worthington
+LOCATION:Strawberry Gardens
+DESCRIPTION:Status: Normal\; Result: 2-3
+END:VEVENT
+END:VCALENDAR

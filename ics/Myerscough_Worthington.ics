@@ -1,0 +1,39 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//github.com/sgrassie/LeagueRepublicConsole//EN
+X-WR-CALNAME:Fleetwood Pool League: Myerscough/Worthington
+X-WR-TIMEZONE:Europe/London
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:45063613@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20260927T225500Z
+SUMMARY:Myerscough/Worthington vs Al-Sharifi/Lee
+LOCATION:Fleetwood Conservative Club
+DESCRIPTION:Status: Normal\; Result: 3-2
+END:VEVENT
+BEGIN:VEVENT
+UID:45244252@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261018T225500Z
+SUMMARY:Littlewood/Littlewood vs Myerscough/Worthington
+LOCATION:Flights Sports and Social Bar
+DESCRIPTION:Status: Normal\; Result: 0-3
+END:VEVENT
+BEGIN:VEVENT
+UID:45546029@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261115T235500Z
+SUMMARY:A Oakley/T Theakston vs Myerscough/Worthington
+LOCATION:Strawberry Gardens
+DESCRIPTION:Status: Normal\; Result: 2-3
+END:VEVENT
+BEGIN:VEVENT
+UID:45692178@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261206T235500Z
+SUMMARY:Myerscough/Worthington vs Caldwell/Cameron
+LOCATION:Fleetwood Conservative Club
+DESCRIPTION:Status: Normal
+END:VEVENT
+END:VCALENDAR

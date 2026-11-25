@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//github.com/sgrassie/LeagueRepublicConsole//EN
+X-WR-CALNAME:Fleetwood Pool League: Lewis Slater
+X-WR-TIMEZONE:Europe/London
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:45063554@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261018T225500Z
+SUMMARY:Lewis Slater vs Tony McCabe
+LOCATION:Working Mens Club
+DESCRIPTION:Status: Normal\; Result: 3-2
+END:VEVENT
+BEGIN:VEVENT
+UID:45496287@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261108T235500Z
+SUMMARY:Danny Burgess vs Lewis Slater
+LOCATION:Fleetwood Conservative Club
+DESCRIPTION:Status: Normal\; Result: 3-0
+END:VEVENT
+END:VCALENDAR

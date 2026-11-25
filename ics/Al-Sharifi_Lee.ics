@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//github.com/sgrassie/LeagueRepublicConsole//EN
+X-WR-CALNAME:Fleetwood Pool League: Al-Sharifi/Lee
+X-WR-TIMEZONE:Europe/London
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:45063613@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20260927T225500Z
+SUMMARY:Myerscough/Worthington vs Al-Sharifi/Lee
+LOCATION:Fleetwood Conservative Club
+DESCRIPTION:Status: Normal\; Result: 3-2
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,31 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//github.com/sgrassie/LeagueRepublicConsole//EN
+X-WR-CALNAME:Fleetwood Pool League: Caine/Cole
+X-WR-TIMEZONE:Europe/London
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:45063731@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261018T225500Z
+SUMMARY:Houton/Rayworth vs Caine/Cole
+LOCATION:Flights Sports and Social Bar
+DESCRIPTION:Status: Normal\; Result: 0-3
+END:VEVENT
+BEGIN:VEVENT
+UID:45517086@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261115T235500Z
+SUMMARY:Drayton/Drayton vs Caine/Cole
+LOCATION:Flights Sports and Social Bar
+DESCRIPTION:Status: Normal\; Result: 0-3
+END:VEVENT
+BEGIN:VEVENT
+UID:45667213@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20261206T235500Z
+SUMMARY:Burgess/Eaves vs Caine/Cole
+LOCATION:Fleetwood Conservative Club
+DESCRIPTION:Status: Normal
+END:VEVENT
+END:VCALENDAR

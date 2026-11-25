@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//github.com/sgrassie/LeagueRepublicConsole//EN
+X-WR-CALNAME:Fleetwood Pool League: Craig Armstrong
+X-WR-TIMEZONE:Europe/London
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:45063132@leaguerepublic
+DTSTAMP:20261125T131022Z
+DTSTART:20260927T225500Z
+SUMMARY:Craig Armstrong vs Tommy Eaves
+LOCATION:Strawberry Gardens
+DESCRIPTION:Status: Normal\; Result: 0-3
+END:VEVENT
+END:VCALENDAR
