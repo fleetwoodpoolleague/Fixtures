@@ -3,40 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fleetwood Pool League – Fixture Calendar subscriptions and downloads</title>
-    <link rel="icon" href="/Fixtures/favicon.ico" type="image/x-icon" sizes="any">
+    <title>Fleetwood Pool League – Fixtures &amp; Phone Calendar Sync</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" sizes="any" />
     <style>
       :root {
-        --primary: #c8102e; /* Liverpool red */
-        --bg: #f9f9f9;
-        --text: #222;
-        --card-bg: #fff;
-        --border: #ddd;
+        --primary: #c8102e;
+        --primary-hover: #a60d26;
+        --bg: #f5f6f8;
+        --text: #1c1e21;
+        --muted: #525860;
+        --card-bg: #ffffff;
+        --border: #d8dde3;
+        --surface: #f0f2f5;
+        --warning-bg: #fff8e6;
+        --warning-border: #d9a300;
+        --warning-text: #5c4300;
+        --badge-home-bg: #e7f4ec;
+        --badge-home-text: #145a32;
+        --badge-away-bg: #eef2f7;
+        --badge-away-text: #334155;
+        --focus: #005fcc;
       }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: system-ui, sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background: var(--bg);
         color: var(--text);
         margin: 0;
         padding: 0;
-      }
-      header {
-        background: var(--primary);
-        color: #fff;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
       }
 
-      header {
-        height: 320px; /* mobile */
-        background-color: #222;
+      /* Compact responsive hero so primary actions stay above the fold */
+      .hero-banner {
+        height: clamp(130px, 20vw, 230px);
+        background-color: #144d29;
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
         background-image: url("img/header-mobile-600x320.jpg");
       }
 
-      /* use image-set if supported for high-DPR */
       @supports (background-image: image-set(url("") 1x)) {
-        header {
+        .hero-banner {
           background-image: image-set(
             url("img/header-mobile-600x320.avif") 1x,
             url("img/header-mobile@2x-1200x640.avif") 2x
@@ -44,14 +60,12 @@
         }
       }
 
-      /* Tablet */
       @media (min-width: 600px) {
-        header {
-          height: 420px;
+        .hero-banner {
           background-image: url("img/header-tablet-900x420.jpg");
         }
         @supports (background-image: image-set(url("") 1x)) {
-          header {
+          .hero-banner {
             background-image: image-set(
               url("img/header-tablet-900x420.avif") 1x,
               url("img/header-tablet@2x-1800x840.avif") 2x
@@ -60,14 +74,12 @@
         }
       }
 
-      /* Desktop */
       @media (min-width: 1200px) {
-        header {
-          height: 720px;
+        .hero-banner {
           background-image: url("img/header-desktop-1440x720.jpg");
         }
         @supports (background-image: image-set(url("") 1x)) {
-          header {
+          .hero-banner {
             background-image: image-set(
               url("img/header-desktop-1440x720.avif") 1x,
               url("img/header-desktop@2x-2880x1440.avif") 2x
@@ -78,214 +90,918 @@
 
       .page-title {
         text-align: center;
-        padding: 2rem 1rem;
-        max-width: 900px;
+        padding: 1.5rem 1rem 0.5rem;
+        max-width: 720px;
         margin: 0 auto;
       }
+
       .page-title h1 {
         margin: 0;
-        font-size: 3rem;
+        font-size: clamp(1.75rem, 4vw, 2.5rem);
+        line-height: 1.15;
         color: var(--text);
       }
+
       .page-title p {
-        margin: 0.5rem 0 0;
-        opacity: 0.8;
-        font-size: 1.1rem;
+        margin: 0.65rem auto 0;
+        color: var(--muted);
+        font-size: 1.05rem;
+        max-width: 58ch;
+      }
+
+      .season-pill {
+        display: inline-block;
+        margin-top: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--muted);
       }
 
       main {
-        max-width: 900px;
-        margin: 2rem auto;
+        max-width: 880px;
+        margin: 1.25rem auto 2.5rem;
         padding: 0 1rem;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
       }
+
+      @media (min-width: 700px) {
+        main {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .ics-card--featured {
+          grid-column: 1 / -1;
+        }
+      }
+
       .ics-card {
         background: var(--card-bg);
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s ease;
+        padding: 1.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        display: flex;
+        flex-direction: column;
       }
-      .ics-card:hover {
-        transform: translateY(-4px);
+
+      .ics-card--featured {
+        border-top: 4px solid var(--primary);
       }
+
       .ics-card h2 {
         font-size: 1.25rem;
-        margin: 0 0 0.5rem;
+        margin: 0 0 0.3rem;
+        color: var(--text);
       }
-      .ics-card p {
+
+      .card-desc {
+        margin: 0 0 1rem;
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+
+      .field-label {
+        display: block;
         font-size: 0.9rem;
-        opacity: 0.8;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        color: var(--text);
       }
-      .ics-card a {
-        display: inline-block;
+
+      .team-select {
+        width: 100%;
+        min-height: 48px;
+        padding: 0.65rem 0.85rem;
+        border: 1px solid #8c959f;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: #fff;
+        color: var(--text);
+      }
+
+      /* 48px minimum touch targets with clear primary/secondary hierarchy */
+      .action-group {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
         margin-top: 1rem;
+      }
+
+      @media (min-width: 560px) {
+        .ics-card--featured .action-group {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        min-height: 48px;
+        padding: 0.65rem 1rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: 1px solid transparent;
+        text-align: center;
+        line-height: 1.25;
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+      }
+
+      .btn-primary {
         background: var(--primary);
         color: #fff;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+
+      .btn-secondary {
+        background: #fff;
+        color: var(--text);
+        border-color: var(--border);
+      }
+
+      .btn-secondary:hover {
+        background: var(--surface);
+        border-color: #b8c1cc;
+      }
+
+      .secondary-links {
+        margin: 0.75rem 0 0;
+        font-size: 0.875rem;
+        color: var(--muted);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 1rem;
+        align-items: center;
+      }
+
+      .secondary-links a {
+        color: var(--text);
+        text-underline-offset: 2px;
+        padding: 0.35rem 0;
+        display: inline-block;
+      }
+
+      .helper-note {
+        margin: 0.6rem 0 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .btn:focus-visible,
+      .team-select:focus-visible,
+      summary:focus-visible,
+      a:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 2px;
+      }
+
+      /* Fixture Viewer */
+      .fixture-preview {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .fixture-preview-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 0.25rem 0.75rem;
+        margin-bottom: 0.6rem;
+      }
+
+      .fixture-preview-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .fixture-count {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .fixture-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.5rem;
+      }
+
+      .fixture-item {
+        padding: 0.7rem 0.85rem;
+        background: var(--bg);
+        border: 1px solid #e5e8ec;
+        border-radius: 8px;
+        font-size: 0.92rem;
+      }
+
+      .fixture-item-top {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.35rem 0.6rem;
+      }
+
+      .fixture-teams {
         font-weight: 600;
+        color: var(--text);
       }
-      .ics-card a:hover {
-        opacity: 0.9;
-        transform: translateX(4px);
+
+      .fixture-meta {
+        display: block;
+        margin-top: 0.2rem;
+        font-size: 0.84rem;
+        color: var(--muted);
       }
+
+      .pill {
+        display: inline-block;
+        padding: 0.1rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+      }
+
+      .pill-home {
+        background: var(--badge-home-bg);
+        color: var(--badge-home-text);
+      }
+
+      .pill-away {
+        background: var(--badge-away-bg);
+        color: var(--badge-away-text);
+      }
+
+      .pill-result {
+        background: var(--surface);
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+
+      .fixtures-disclosure {
+        margin-top: 0.75rem;
+      }
+
+      .fixtures-disclosure summary {
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--primary);
+        padding: 0.5rem 0;
+        list-style-position: inside;
+      }
+
+      .fixtures-disclosure[open] summary {
+        margin-bottom: 0.5rem;
+      }
+
+      .alert-warning {
+        margin-top: 1rem;
+        padding: 0.9rem 1rem;
+        background: var(--warning-bg);
+        border: 1px solid var(--warning-border);
+        border-radius: 8px;
+        font-size: 0.92rem;
+        color: var(--warning-text);
+      }
+
+      .alert-warning a {
+        color: var(--warning-text);
+        font-weight: 700;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
       footer {
         text-align: center;
-        padding: 2rem 1rem;
+        padding: 1.5rem 1rem 2.5rem;
         font-size: 0.9rem;
-        color: #666;
+        color: var(--muted);
+      }
+
+      footer p {
+        margin: 0.35rem 0;
+      }
+
+      footer a {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
       }
     </style>
   </head>
   <body>
-    <header>
-    </header>
+    <header class="hero-banner" aria-hidden="true"></header>
 
     <div class="page-title">
       <h1>Fleetwood Pool League Fixtures</h1>
-      <p>Subscribe to Division 1 or Division 2 fixtures via iCalendar (.ics) using the calendar system of your choice.</p>
-      <p>Alternatively, you can subscribe to your teams individual fixtures by selecting from the drop down.</p>
-      <p>Import into Google Calendar, Outlook Calendar, or Apple Calendar are supported. For anything else, use the direct .ics link.</p>
+      <p>
+        Check upcoming matches and add them to your phone calendar — dates update automatically if a fixture moves.
+      </p>
+      <div id="season-pill" class="season-pill" hidden></div>
     </div>
 
     <main id="fixture-list">
-      <!-- Example dummy .ics cards -->
-      <div class="ics-card">
-        <h2>Division 1 Fixtures</h2>
-        <p>Full schedule for Division 1 teams</p>
-        <a href="https://calendar.google.com/calendar/r?cid=webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-1.ics">Subscribe in Google Calendar</a>
-        <a href="https://outlook.office.com/calendar/0/addfromweb?url=webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-1.ics">Subscribe in Outlook Calendar</a>
-        <a href="webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-1.ics">Subscribe in Apple Calendar</a>
-        <a href="https://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-1.ics" download>Download .ICS</a>
-      </div>
+      <!-- Primary card: individual players care about their own team first -->
+      <section class="ics-card ics-card--featured" aria-labelledby="team-heading">
+        <h2 id="team-heading">Your Team's Fixtures</h2>
+        <p class="card-desc">
+          Pick your team to view upcoming matches and sync them to your phone.
+        </p>
 
-      <div class="ics-card">
-        <h2>Division 2 Fixtures</h2>
-        <p>Full schedule for Division 2 teams</p>
-        <a href="https://calendar.google.com/calendar/r?cid=webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-2.ics">Subscribe in Google Calendar</a>
-        <a href="https://outlook.office.com/calendar/0/addfromweb?url=webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-2.ics">Subscribe in Outlook Calendar</a>
-        <a href="webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-2.ics">Subscribe in Apple Calendar</a>
-        <a href="https://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/Division-2.ics" download>Download .ICS</a>
-      </div>
-
-      <div class="ics-card">
-        <h2>Team Fixtures</h2>
-        <p>Select your team to view fixtures</p>
-        <select id="team-selector" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem;">
-          <option value="">-- Select a team --</option>
-          <option value="Bar-1.ics">Bar 1</option>
-          <option value="Cons-A.ics">Cons A</option>
-          <option value="Fleetwood-Cons-B.ics">Fleetwood Cons B</option>
-          <option value="Gardeners-Arms.ics">Gardeners Arms</option>
-          <option value="Gardeners-Vets.ics">Gardeners Vets</option>
-          <option value="Kings-Own-Comrades.ics">Kings Own Comrades</option>
-          <option value="Rossall-Tavern-.ics">Rossall Tavern</option>
-          <option value="Royal-Oak-A.ics">Royal Oak A</option>
-          <option value="Sherelles-A.ics">Sherelles A</option>
-          <option value="Strawberry-B.ics">Strawberry B</option>
-          <option value="Strawberry-Gardens.ics">Strawberry Gardens</option>
-          <option value="Tee-Time-Social-Club.ics">Tee Time Social Club</option>
-          <option value="The-Ashley.ics">The Ashley</option>
-          <option value="The-Bug-A.ics">The Bug A</option>
-          <option value="The-Bug-B.ics">The Bug B</option>
-          <option value="Top-Club.ics">Top Club</option>
-          <option value="Wings-Club.ics">Wings Club</option>
-          <option value="Working-Mens-Club.ics">Working Mens Club</option>
+        <label class="field-label" for="team-selector">Select your team</label>
+        <select id="team-selector" class="team-select">
+          <option value="">Choose your team…</option>
+          <optgroup label="Division 1">
+            <option value="Fleetwood-Cons-A.ics" data-division="Division-1.ics">Fleetwood Cons A</option>
+            <option value="Gardeners-Arms.ics" data-division="Division-1.ics">Gardeners Arms</option>
+            <option value="Gardeners-Vets.ics" data-division="Division-1.ics">Gardeners Vets</option>
+            <option value="Kings-Own-Comrades.ics" data-division="Division-1.ics">Kings Own Comrades</option>
+            <option value="Sherelles.ics" data-division="Division-1.ics">Sherelles</option>
+            <option value="Strawberry-Gardens-A.ics" data-division="Division-1.ics">Strawberry Gardens A</option>
+            <option value="Strawberry-Gardens-B.ics" data-division="Division-1.ics">Strawberry Gardens B</option>
+            <option value="Tee-Time-Social-Club-A.ics" data-division="Division-1.ics">Tee Time Social Club A</option>
+            <option value="The-Ashley.ics" data-division="Division-1.ics">The Ashley</option>
+            <option value="Wings-Club.ics" data-division="Division-1.ics">Wings Club</option>
+          </optgroup>
+          <optgroup label="Division 2">
+            <option value="Bar-1.ics" data-division="Division-2.ics">Bar 1</option>
+            <option value="Fleetwood-Cons-B.ics" data-division="Division-2.ics">Fleetwood Cons B</option>
+            <option value="Flights-A.ics" data-division="Division-2.ics">Flights A</option>
+            <option value="Flights-B.ics" data-division="Division-2.ics">Flights B</option>
+            <option value="Rossall-Tavern.ics" data-division="Division-2.ics">Rossall Tavern</option>
+            <option value="Royal-Oak.ics" data-division="Division-2.ics">Royal Oak</option>
+            <option value="Tee-Time-Social-Club-B.ics" data-division="Division-2.ics">Tee Time Social Club B</option>
+            <option value="Three-Lights.ics" data-division="Division-2.ics">Three Lights</option>
+            <option value="Top-Club.ics" data-division="Division-2.ics">Top Club</option>
+            <option value="Workies.ics" data-division="Division-2.ics">Workies</option>
+          </optgroup>
         </select>
-        <div id="team-links" style="display: none;">
-          <a id="google-link" href="">Subscribe in Google Calendar</a>
-          <a id="outlook-link" href="">Subscribe in Outlook Calendar</a>
-          <a id="apple-link" href="">Subscribe in Apple Calendar</a>
-          <a id="download-link" href="" download>Download .ICS</a>
-        </div>
-      </div>
 
-      <!-- <div class="ics-card">
-        <h2>Fleetwood Pool League – All Fixtures</h2>
-        <p>Combined fixtures for all divisions and teams</p>
-        <a href="/ics/all-fixtures.ics" download>Download .ICS</a>
-      </div> -->
+        <div id="team-preview" aria-live="polite"></div>
+
+        <div id="team-links" hidden>
+          <div class="action-group">
+            <a id="apple-link" class="btn btn-secondary" href="">Add to Apple Calendar (iPhone / Mac)</a>
+            <a id="google-link" class="btn btn-secondary" href="" target="_blank" rel="noopener">Add to Google Calendar</a>
+            <a id="outlook-live-link" class="btn btn-secondary" href="" target="_blank" rel="noopener">Add to Outlook (Personal)</a>
+            <button id="copy-link-btn" type="button" class="btn btn-secondary">Copy calendar link</button>
+          </div>
+          <p class="helper-note">
+            <strong>Google Calendar on mobile?</strong> Confirm once in your browser — matches sync to the app automatically.
+          </p>
+          <div class="secondary-links">
+            <a id="outlook-work-link" href="" target="_blank" rel="noopener">Outlook (Work / Microsoft 365)</a>
+            <a id="download-link" href="" download>Download one-time file (.ics — doesn't auto-update)</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Secondary cards: full division schedules -->
+      <section class="ics-card" id="division-card-1" data-division-card="Division-1.ics" aria-labelledby="div1-heading">
+        <h2 id="div1-heading">Division 1 — All Fixtures</h2>
+        <p class="card-desc">Every Division 1 match in one calendar.</p>
+        <div class="division-preview"></div>
+        <div class="action-group" data-division-actions="Division-1.ics"></div>
+        <div class="secondary-links" data-division-secondary="Division-1.ics"></div>
+      </section>
+
+      <section class="ics-card" id="division-card-2" data-division-card="Division-2.ics" aria-labelledby="div2-heading">
+        <h2 id="div2-heading">Division 2 — All Fixtures</h2>
+        <p class="card-desc">Every Division 2 match in one calendar.</p>
+        <div class="division-preview"></div>
+        <div class="action-group" data-division-actions="Division-2.ics"></div>
+        <div class="secondary-links" data-division-secondary="Division-2.ics"></div>
+      </section>
     </main>
 
+    <div id="copy-status" class="sr-only" aria-live="polite"></div>
+
     <footer>
-      <p><a href="https://fleetwoodpoolleague.co.uk"
-        target="_blank"
-        rel="noopener">Fleetwood Pool League</a></p>
       <p>
-        Generated automatically by
-        <a
-          href="https://github.com/fleetwoodpoolleague/LeagueRepublicApi"
-          target="_blank"
-          rel="noopener"
-          >LeagueRepublicApi</a
-        >
+        <a href="https://fleetwoodpoolleague.co.uk" target="_blank" rel="noopener">Fleetwood Pool League</a>
+        ·
+        <a href="https://github.com/fleetwoodpoolleague/LeagueRepublicApi" target="_blank" rel="noopener">LeagueRepublicApi</a>
       </p>
-      <p id="last-updated" style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">
-        <!-- Last updated will be inserted here by JavaScript -->
-      </p>
+      <p id="last-updated">Fixtures sync automatically every day.</p>
     </footer>
 
     <script>
-      // Handle team selector dropdown
-      document.addEventListener('DOMContentLoaded', function() {
-        const teamSelector = document.getElementById('team-selector');
-        const teamLinks = document.getElementById('team-links');
-        const googleLink = document.getElementById('google-link');
-        const outlookLink = document.getElementById('outlook-link');
-        const appleLink = document.getElementById('apple-link');
-        const downloadLink = document.getElementById('download-link');
+      (function () {
+        const RAW_BASE = 'https://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/';
+        const WEBCAL_BASE = 'webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/';
+        const STORAGE_KEY = 'fpl_selected_team';
+        const isAppleDevice = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent);
 
-        teamSelector.addEventListener('change', function() {
-          const selectedFile = this.value;
-          
-          if (selectedFile) {
-            const baseUrl = 'https://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/';
-            const webcalUrl = 'webcal://raw.githubusercontent.com/fleetwoodpoolleague/Fixtures/refs/heads/main/ics/';
-            
-            googleLink.href = `https://calendar.google.com/calendar/r?cid=${webcalUrl}${selectedFile}`;
-            outlookLink.href = `https://outlook.office.com/calendar/0/addfromweb?url=${webcalUrl}${selectedFile}`;
-            appleLink.href = `${webcalUrl}${selectedFile}`;
-            downloadLink.href = `${baseUrl}${selectedFile}`;
-            
-            teamLinks.style.display = 'block';
-          } else {
-            teamLinks.style.display = 'none';
+        const divisionCache = new Map();
+        const teamCache = new Map();
+        let activeLoadToken = 0;
+        let initialized = false;
+
+        function escapeHtml(value) {
+          return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        }
+
+        function makeSafeFileName(name) {
+          return name
+            .trim()
+            .replace(/[<>:"/\\|?*]/g, '_')
+            .replace(/ /g, '-') + '.ics';
+        }
+
+        function buildCalendarUrls(file) {
+          const encodedFile = encodeURIComponent(file);
+          const httpsUrl = `${RAW_BASE}${encodedFile}`;
+          const webcalUrl = `${WEBCAL_BASE}${encodedFile}`;
+          return {
+            apple: webcalUrl,
+            google: `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(webcalUrl)}`,
+            outlookLive: `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(httpsUrl)}`,
+            outlookWork: `https://outlook.office.com/calendar/0/addfromweb?url=${encodeURIComponent(httpsUrl)}`,
+            download: `./ics/${encodedFile}`,
+            copy: httpsUrl
+          };
+        }
+
+        function parseIcsDate(str) {
+          const m = String(str || '').match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(Z)?$/);
+          if (!m) return null;
+          const iso = `${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}${m[7] || ''}`;
+          const d = new Date(iso);
+          return Number.isNaN(d.getTime()) ? null : d;
+        }
+
+        function parseIcs(icsText) {
+          const unfolded = icsText.replace(/\r?\n[ \t]/g, '');
+          const blocks = unfolded.split('BEGIN:VEVENT').slice(1);
+          const events = [];
+          let latestStamp = null;
+
+          for (const block of blocks) {
+            const get = (key) => {
+              const m = block.match(new RegExp(`^${key}(?:;[^:]*)?:(.*)$`, 'm'));
+              if (!m) return '';
+              return m[1]
+                .trim()
+                .replace(/\\n/gi, ' ')
+                .replace(/\\,/g, ',')
+                .replace(/\\;/g, ';')
+                .replace(/\\\\/g, '\\');
+            };
+
+            const dtStamp = parseIcsDate(get('DTSTAMP'));
+            if (dtStamp && (!latestStamp || dtStamp > latestStamp)) {
+              latestStamp = dtStamp;
+            }
+
+            const date = parseIcsDate(get('DTSTART'));
+            const summary = get('SUMMARY');
+            const [home = '', away = ''] = summary.split(' vs ').map((s) => s.trim());
+            const description = get('DESCRIPTION');
+            const resultMatch = description.match(/Result:\s*([^;]+)/i);
+
+            if (date) {
+              events.push({
+                date,
+                summary,
+                home,
+                away,
+                location: get('LOCATION'),
+                description,
+                result: resultMatch ? resultMatch[1].trim() : ''
+              });
+            }
           }
-        });
-      });
 
-      // Display last updated information
-      document.addEventListener('DOMContentLoaded', function() {
-        const lastUpdatedElement = document.getElementById('last-updated');
-        
-        // Try to get the actual last modified date of the document
-        if (document.lastModified) {
-          const lastModified = new Date(document.lastModified);
-          
-          // Check if the date is valid (some servers don't provide this)
-          if (!isNaN(lastModified.getTime()) && lastModified.getFullYear() > 1970) {
-            lastUpdatedElement.textContent = `Last updated: ${lastModified.toLocaleDateString('en-GB', {
-              year: 'numeric',
-              month: 'long',
+          events.sort((a, b) => a.date - b.date);
+          return { events, latestStamp };
+        }
+
+        function formatMatchDate(date) {
+          return date.toLocaleString('en-GB', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        }
+
+        function updateLastSynced(date, seasonName) {
+          const footerEl = document.getElementById('last-updated');
+          if (date) {
+            const formatted = date.toLocaleDateString('en-GB', {
               day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })}`;
-          } else {
-            // Fallback to current date if document.lastModified is not reliable
-            lastUpdatedElement.textContent = `Page loaded: ${new Date().toLocaleDateString('en-GB', {
-              year: 'numeric',
               month: 'long',
-              day: 'numeric'
-            })}`;
+              year: 'numeric'
+            });
+            footerEl.textContent = `Fixtures last updated: ${formatted}`;
+          }
+          if (seasonName) {
+            const pill = document.getElementById('season-pill');
+            pill.textContent = `Current season: ${seasonName}`;
+            pill.hidden = false;
           }
         }
-      });
+
+        async function copyCalendarLink(url, button) {
+          const originalLabel = button.textContent;
+          const liveRegion = document.getElementById('copy-status');
+          try {
+            await navigator.clipboard.writeText(url);
+            button.textContent = 'Link copied!';
+            liveRegion.textContent = 'Calendar subscription link copied to clipboard.';
+          } catch {
+            window.prompt('Copy this calendar subscription link:', url);
+            return;
+          }
+          setTimeout(() => {
+            button.textContent = originalLabel;
+          }, 2200);
+        }
+
+        async function fetchIcs(file, cache) {
+          if (cache.has(file)) return cache.get(file);
+          const res = await fetch(`./ics/${encodeURIComponent(file)}`);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const parsed = parseIcs(await res.text());
+          cache.set(file, parsed);
+          return parsed;
+        }
+
+        function renderFixtureItems(events, highlightTeamName) {
+          const normalizedTeam = (highlightTeamName || '').trim().toLowerCase();
+          return events
+            .map((ev) => {
+              let badgeHtml = '';
+              if (ev.result) {
+                badgeHtml = `<span class="pill pill-result">${escapeHtml(ev.result)}</span>`;
+              } else if (normalizedTeam) {
+                const isHome = ev.home.toLowerCase() === normalizedTeam;
+                badgeHtml = isHome
+                  ? '<span class="pill pill-home">Home</span>'
+                  : '<span class="pill pill-away">Away</span>';
+              }
+              const venuePart = ev.location ? ` · ${escapeHtml(ev.location)}` : '';
+              return `
+                <li class="fixture-item">
+                  <div class="fixture-item-top">
+                    <span class="fixture-teams">${escapeHtml(ev.summary)}</span>
+                    ${badgeHtml}
+                  </div>
+                  <span class="fixture-meta">${escapeHtml(formatMatchDate(ev.date))}${venuePart}</span>
+                </li>`;
+            })
+            .join('');
+        }
+
+        function renderFixtureListSection(events, highlightTeamName, maxPreview) {
+          const now = new Date();
+          const upcoming = events.filter((e) => e.date >= now);
+          const hasUpcoming = upcoming.length > 0;
+          const previewEvents = hasUpcoming
+            ? upcoming.slice(0, maxPreview)
+            : events.slice(-maxPreview).reverse();
+
+          const title = hasUpcoming
+            ? `Upcoming fixtures (${upcoming.length} remaining)`
+            : 'Season complete — recent results';
+
+          const remaining = events.length > previewEvents.length;
+          const fullListHtml = remaining
+            ? `
+              <details class="fixtures-disclosure">
+                <summary>View all ${events.length} fixtures this season</summary>
+                <ul class="fixture-list">${renderFixtureItems(events, highlightTeamName)}</ul>
+              </details>`
+            : '';
+
+          return `
+            <div class="fixture-preview">
+              <div class="fixture-preview-header">
+                <span class="fixture-preview-title">${escapeHtml(title)}</span>
+                <span class="fixture-count">${events.length} matches total</span>
+              </div>
+              <ul class="fixture-list">${renderFixtureItems(previewEvents, highlightTeamName)}</ul>
+              ${fullListHtml}
+            </div>`;
+        }
+
+        function hydrateDivisionCard(cardEl, file) {
+          const urls = buildCalendarUrls(file);
+          const actionsEl = cardEl.querySelector('[data-division-actions]');
+          const secondaryEl = cardEl.querySelector('[data-division-secondary]');
+
+          actionsEl.innerHTML = `
+            <a class="btn ${isAppleDevice ? 'btn-primary' : 'btn-secondary'}" href="${urls.apple}">Add to Apple Calendar</a>
+            <a class="btn ${!isAppleDevice ? 'btn-primary' : 'btn-secondary'}" href="${urls.google}" target="_blank" rel="noopener">Add to Google Calendar</a>
+            <a class="btn btn-secondary" href="${urls.outlookLive}" target="_blank" rel="noopener">Add to Outlook (Personal)</a>
+            <button type="button" class="btn btn-secondary" data-copy-url="${escapeHtml(urls.copy)}">Copy calendar link</button>
+          `;
+
+          secondaryEl.innerHTML = `
+            <a href="${urls.outlookWork}" target="_blank" rel="noopener">Outlook (Work / 365)</a>
+            <a href="${urls.download}" download>Download .ics (one-time)</a>
+          `;
+
+          actionsEl.querySelector('[data-copy-url]').addEventListener('click', (e) => {
+            copyCalendarLink(urls.copy, e.currentTarget);
+          });
+        }
+
+        function renderDivisionPreview(cardEl, events) {
+          const previewContainer = cardEl.querySelector('.division-preview');
+          if (!previewContainer || !events.length) return;
+
+          const now = new Date();
+          const upcoming = events.filter((e) => e.date >= now);
+          const label = upcoming.length
+            ? `View ${upcoming.length} upcoming fixtures (${events.length} total)`
+            : `View all ${events.length} fixtures (season complete)`;
+          const itemsToShow = upcoming.length ? upcoming : events;
+
+          previewContainer.innerHTML = `
+            <details class="fixtures-disclosure">
+              <summary>${escapeHtml(label)}</summary>
+              <ul class="fixture-list">${renderFixtureItems(itemsToShow, '')}</ul>
+            </details>`;
+        }
+
+        function populateTeamSelect(divisions) {
+          const selector = document.getElementById('team-selector');
+          const previousValue = selector.value;
+          const fragment = document.createDocumentFragment();
+
+          const placeholder = document.createElement('option');
+          placeholder.value = '';
+          placeholder.textContent = 'Choose your team…';
+          fragment.appendChild(placeholder);
+
+          for (const division of divisions) {
+            if (!division.teams || !division.teams.length) continue;
+            const group = document.createElement('optgroup');
+            group.label = division.name;
+            for (const team of division.teams) {
+              const option = document.createElement('option');
+              option.value = team.file;
+              option.textContent = team.name;
+              option.dataset.division = division.file;
+              group.appendChild(option);
+            }
+            fragment.appendChild(group);
+          }
+
+          selector.innerHTML = '';
+          selector.appendChild(fragment);
+          if (previousValue && [...selector.options].some((o) => o.value === previousValue)) {
+            selector.value = previousValue;
+          }
+        }
+
+        async function loadCatalog() {
+          let manifestLoaded = false;
+
+          // 1. Prefer CI-generated manifest.json when available
+          try {
+            const res = await fetch('./ics/manifest.json');
+            if (res.ok) {
+              const manifest = await res.json();
+              if (Array.isArray(manifest.divisions) && manifest.divisions.length) {
+                populateTeamSelect(manifest.divisions);
+                manifestLoaded = true;
+                const updatedDate = manifest.updatedAt ? new Date(manifest.updatedAt) : null;
+                updateLastSynced(
+                  updatedDate && !Number.isNaN(updatedDate.getTime()) ? updatedDate : null,
+                  manifest.seasonName || ''
+                );
+              }
+            }
+          } catch {
+            // Manifest not present yet; fall through to live Division ICS discovery
+          }
+
+          // 2. Load Division ICS feeds for previews & automatic team-list discovery fallback
+          const discoveredDivisions = [];
+          let newestStamp = null;
+          const divisionCards = [...document.querySelectorAll('[data-division-card]')];
+
+          await Promise.all(
+            divisionCards.map(async (cardEl) => {
+              const file = cardEl.dataset.divisionCard;
+              const name = cardEl.querySelector('h2').textContent.split('—')[0].trim();
+              try {
+                const { events, latestStamp } = await fetchIcs(file, divisionCache);
+                if (latestStamp && (!newestStamp || latestStamp > newestStamp)) {
+                  newestStamp = latestStamp;
+                }
+                renderDivisionPreview(cardEl, events);
+
+                const teamSet = new Map();
+                for (const ev of events) {
+                  for (const t of [ev.home, ev.away]) {
+                    if (t && !teamSet.has(t.toLowerCase())) {
+                      teamSet.set(t.toLowerCase(), { name: t, file: makeSafeFileName(t) });
+                    }
+                  }
+                }
+                const teams = [...teamSet.values()].sort((a, b) => a.name.localeCompare(b.name));
+                discoveredDivisions.push({ name, file, teams });
+              } catch {
+                // Keep static fallback if running offline or via file://
+              }
+            })
+          );
+
+          if (newestStamp && !document.getElementById('last-updated').textContent.startsWith('Fixtures last updated:')) {
+            updateLastSynced(newestStamp, '');
+          }
+
+          // If manifest wasn't loaded, populate selector from live Division ICS files so teams never drift
+          if (!manifestLoaded && discoveredDivisions.length) {
+            discoveredDivisions.sort((a, b) => a.name.localeCompare(b.name));
+            populateTeamSelect(discoveredDivisions);
+          }
+        }
+
+        function setTeamUrlParam(file) {
+          try {
+            const url = new URL(window.location.href);
+            if (file) {
+              url.searchParams.set('team', file);
+            } else {
+              url.searchParams.delete('team');
+            }
+            window.history.replaceState(null, '', url.toString());
+          } catch {
+            // Ignore on restricted origins (e.g., file://)
+          }
+        }
+
+        async function handleTeamSelection() {
+          const selector = document.getElementById('team-selector');
+          const previewEl = document.getElementById('team-preview');
+          const linksEl = document.getElementById('team-links');
+          const file = selector.value;
+          const selectedOption = selector.options[selector.selectedIndex];
+          const teamName = selectedOption ? selectedOption.textContent.trim() : '';
+          const divisionFile = selectedOption?.dataset.division || '';
+          const loadToken = ++activeLoadToken;
+
+          if (!file) {
+            previewEl.innerHTML = '';
+            linksEl.hidden = true;
+            try { localStorage.removeItem(STORAGE_KEY); } catch {}
+            setTeamUrlParam('');
+            return;
+          }
+
+          try { localStorage.setItem(STORAGE_KEY, file); } catch {}
+          setTeamUrlParam(file);
+
+          const urls = buildCalendarUrls(file);
+          const appleBtn = document.getElementById('apple-link');
+          const googleBtn = document.getElementById('google-link');
+
+          appleBtn.className = `btn ${isAppleDevice ? 'btn-primary' : 'btn-secondary'}`;
+          googleBtn.className = `btn ${!isAppleDevice ? 'btn-primary' : 'btn-secondary'}`;
+          appleBtn.href = urls.apple;
+          googleBtn.href = urls.google;
+          document.getElementById('outlook-live-link').href = urls.outlookLive;
+          document.getElementById('outlook-work-link').href = urls.outlookWork;
+          document.getElementById('download-link').href = urls.download;
+          document.getElementById('copy-link-btn').onclick = (e) => copyCalendarLink(urls.copy, e.currentTarget);
+
+          previewEl.innerHTML = `<p class="helper-note">Loading fixtures for ${escapeHtml(teamName)}…</p>`;
+
+          try {
+            const { events, latestStamp } = await fetchIcs(file, teamCache);
+            if (loadToken !== activeLoadToken) return;
+
+            if (latestStamp && !document.getElementById('last-updated').textContent.startsWith('Fixtures last updated:')) {
+              updateLastSynced(latestStamp, '');
+            }
+
+            if (events.length === 0) {
+              linksEl.hidden = true;
+              const fallbackDivisionMatches = getDivisionFallbackMatches(divisionFile, teamName);
+              const divAnchor = divisionFile === 'Division-2.ics' ? '#division-card-2' : '#division-card-1';
+              const divLabel = divisionFile === 'Division-2.ics' ? 'Division 2' : 'Division 1';
+
+              previewEl.innerHTML = `
+                <div class="alert-warning" role="alert">
+                  <strong>No calendar feed is available for ${escapeHtml(teamName)} right now.</strong>
+                  This team's individual calendar is currently empty. You can subscribe to the full
+                  <a href="${divAnchor}">${divLabel} calendar</a> below instead.
+                </div>
+                ${fallbackDivisionMatches.length ? renderFixtureListSection(fallbackDivisionMatches, teamName, 4) : ''}`;
+              return;
+            }
+
+            previewEl.innerHTML = renderFixtureListSection(events, teamName, 4);
+            linksEl.hidden = false;
+          } catch {
+            if (loadToken !== activeLoadToken) return;
+
+            // Check if we have division fixtures in memory to still show matches + warn clearly
+            const fallbackDivisionMatches = getDivisionFallbackMatches(divisionFile, teamName);
+            if (fallbackDivisionMatches.length) {
+              const divAnchor = divisionFile === 'Division-2.ics' ? '#division-card-2' : '#division-card-1';
+              const divLabel = divisionFile === 'Division-2.ics' ? 'Division 2' : 'Division 1';
+              linksEl.hidden = true;
+              previewEl.innerHTML = `
+                <div class="alert-warning" role="alert">
+                  <strong>Individual calendar file not found for ${escapeHtml(teamName)}.</strong>
+                  You can view your matches below and subscribe to the full
+                  <a href="${divAnchor}">${divLabel} calendar</a> instead.
+                </div>
+                ${renderFixtureListSection(fallbackDivisionMatches, teamName, 4)}`;
+            } else {
+              // Offline / file:// graceful fallback — keep calendar subscription links usable
+              previewEl.innerHTML = `
+                <div class="alert-warning" role="status">
+                  Couldn't load the live fixture preview right now. You can still subscribe using the buttons below.
+                </div>`;
+              linksEl.hidden = false;
+            }
+          }
+        }
+
+        function getDivisionFallbackMatches(divisionFile, teamName) {
+          if (!divisionFile || !divisionCache.has(divisionFile)) return [];
+          const target = teamName.trim().toLowerCase();
+          return divisionCache
+            .get(divisionFile)
+            .events.filter(
+              (ev) => ev.home.toLowerCase() === target || ev.away.toLowerCase() === target
+            );
+        }
+
+        function restoreSavedTeam() {
+          const selector = document.getElementById('team-selector');
+          let saved = '';
+          try {
+            saved = new URLSearchParams(window.location.search).get('team') || localStorage.getItem(STORAGE_KEY) || '';
+          } catch {}
+          if (saved && [...selector.options].some((o) => o.value === saved)) {
+            selector.value = saved;
+          }
+          handleTeamSelection();
+        }
+
+        async function init() {
+          if (!initialized) {
+            initialized = true;
+            document.querySelectorAll('[data-division-card]').forEach((cardEl) => {
+              hydrateDivisionCard(cardEl, cardEl.dataset.divisionCard);
+            });
+            document.getElementById('team-selector').addEventListener('change', handleTeamSelection);
+            await loadCatalog();
+          }
+          restoreSavedTeam();
+        }
+
+        window.addEventListener('pageshow', init);
+      })();
     </script>
   </body>
 </html>
