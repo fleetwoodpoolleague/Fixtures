@@ -1,0 +1,120 @@
+{
+  "seasonName": "Summer/Autumn 2026",
+  "updatedAt": "2026-11-26T09:17:05.9480856Z",
+  "divisions": [
+    {
+      "name": "Division 1",
+      "file": "Division-1.ics",
+      "fixtureCount": 90,
+      "teams": [
+        {
+          "name": "Fleetwood Cons A",
+          "file": "Fleetwood-Cons-A.ics",
+          "fixtureCount": 23
+        },
+        {
+          "name": "Gardeners Arms",
+          "file": "Gardeners-Arms.ics",
+          "fixtureCount": 20
+        },
+        {
+          "name": "Gardeners Vets",
+          "file": "Gardeners-Vets.ics",
+          "fixtureCount": 23
+        },
+        {
+          "name": "Kings Own Comrades",
+          "file": "Kings-Own-Comrades.ics",
+          "fixtureCount": 21
+        },
+        {
+          "name": "Sherelles",
+          "file": "Sherelles.ics",
+          "fixtureCount": 21
+        },
+        {
+          "name": "Strawberry Gardens A",
+          "file": "Strawberry-Gardens-A.ics",
+          "fixtureCount": 20
+        },
+        {
+          "name": "Strawberry Gardens B",
+          "file": "Strawberry-Gardens-B.ics",
+          "fixtureCount": 22
+        },
+        {
+          "name": "Tee Time Social Club A",
+          "file": "Tee-Time-Social-Club-A.ics",
+          "fixtureCount": 20
+        },
+        {
+          "name": "The Ashley",
+          "file": "The-Ashley.ics",
+          "fixtureCount": 21
+        },
+        {
+          "name": "Wings Club",
+          "file": "Wings-Club.ics",
+          "fixtureCount": 20
+        }
+      ]
+    },
+    {
+      "name": "Division 2",
+      "file": "Division-2.ics",
+      "fixtureCount": 90,
+      "teams": [
+        {
+          "name": "Bar 1",
+          "file": "Bar-1.ics",
+          "fixtureCount": 20
+        },
+        {
+          "name": "Fleetwood Cons B",
+          "file": "Fleetwood-Cons-B.ics",
+          "fixtureCount": 22
+        },
+        {
+          "name": "Flights A",
+          "file": "Flights-A.ics",
+          "fixtureCount": 20
+        },
+        {
+          "name": "Flights B",
+          "file": "Flights-B.ics",
+          "fixtureCount": 22
+        },
+        {
+          "name": "Rossall Tavern",
+          "file": "Rossall-Tavern.ics",
+          "fixtureCount": 21
+        },
+        {
+          "name": "Royal Oak",
+          "file": "Royal-Oak.ics",
+          "fixtureCount": 21
+        },
+        {
+          "name": "Tee Time Social Club B",
+          "file": "Tee-Time-Social-Club-B.ics",
+          "fixtureCount": 20
+        },
+        {
+          "name": "Three Lights",
+          "file": "Three-Lights.ics",
+          "fixtureCount": 20
+        },
+        {
+          "name": "Top Club",
+          "file": "Top-Club.ics",
+          "fixtureCount": 21
+        },
+        {
+          "name": "Workies",
+          "file": "Workies.ics",
+          "fixtureCount": 20
+        }
+      ]
+    }
+  ]
+}
